@@ -1,0 +1,11 @@
+[Unit]
+Description=Boiler Switch Monitor Service
+After=multi-user.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/home/user1/venvs/boilerswitch/bin/python3 /home/user1/repos/ecofuels/boilerswitch/bin/boilerswitch.py
+
+[Install]
+WantedBy=multi-user.target
