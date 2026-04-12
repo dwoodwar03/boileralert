@@ -1,0 +1,18 @@
+mail:
+  server: {{ SERVER }}
+  send_to:
+    - [{{ FULL_NAME }}, {{ EMAIL }}]
+    - [{{ FULL_NAME }}, {{ EMAIL }}]
+  sender_domain: ecofuelsheating.co.uk
+  sender_full_name: Biomass Boiler
+
+messaging:
+  fault_subject: Biomass Boiler in error
+  fault_message: An error has occurred on the CUSTOMER_NAME biomass boiler
+  clear_subject: Biomass Boiler RESET
+  clear_message: The error has been RESET on the CUSTOMER_NAME biomass boiler
+
+monitoring:
+  gpio_pin: 40
+  max_alerts_hour: 14
+  sleep_time_secs: 2
