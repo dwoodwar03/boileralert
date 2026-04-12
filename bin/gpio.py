@@ -9,6 +9,8 @@ class Monitor:
 
         self.gpio_pin = gpio_pin
         self.logger = my_logger
+        self.last_pin_state = None
+
         # Metrics measured from start of run.
         self.run_stats = {
             "reads": 0,  # Number of reads performed.
@@ -30,7 +32,7 @@ class Monitor:
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.gpio_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-    def get_reading(self, last_pin_state):
+    def get_reading(self):
         # In order to avoid false readings possibly due to cross talk...
         # 4 readings are taken a short time apart, they all need to show a fault
         # in order to read as a fault.
@@ -66,7 +68,7 @@ class Monitor:
                 self.run_stats["misread1st"] += 1
                 self.daily_stats["misread1st"] += 1
 
-            return_reading = last_pin_state  # A misread should not be detected as a no alarm, as misreads can happen (rarely) when circuit closed.
+            return_reading = self.last_pin_state  # A misread should not be detected as a no alarm, as misreads can happen (rarely) when circuit closed.
             self.logger.debug(f"{p1} {p2} {p3} {p4} -- MISREAD")
 
         else:  # Otherwise must be true fault (p1 -> p4 show 0)
@@ -74,6 +76,7 @@ class Monitor:
             self.daily_stats["fault"] += 1
             # self.logger.debug(f"{p1} {p2} {p3} {p4} -- FAULT")
 
+        self.last_pin_state = return_reading
         return return_reading
 
     def log_stats(self):
